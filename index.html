@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LedgerFlow — SaaS Revenue &amp; Cashflow Analytics</title>
+  <meta name="description" content="LedgerFlow is a B2B SaaS financial dashboard with interactive revenue vs. expense charts, segment filters, sortable invoice tables, CSV export, and a Ctrl+K command palette." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23059669'/%3E%3Cpath d='M9 21V15M16 21V10M23 21V13' stroke='%23ffffff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/tokens.css" />
+  <link rel="stylesheet" href="styles/main.css" />
+  <script defer src="js/data.js"></script>
+  <script defer src="js/charts.js"></script>
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar" aria-label="Workspace navigation">
+      <div class="brand">
+        <span class="brand__mark" aria-hidden="true">LF</span>
+        <span>LedgerFlow</span>
+      </div>
+
+      <nav class="side-nav">
+        <a href="#overview" class="is-active">Overview <span class="kbd">01</span></a>
+        <a href="#analytics">Revenue Mix <span class="kbd">02</span></a>
+        <a href="#ledger">Transactions <span class="kbd">03</span></a>
+      </nav>
+
+      <div class="sidebar__card">
+        <strong>Q4 Board Pack Ready</strong>
+        <p>Export filtered subscription invoices straight to CSV or trigger actions via Ctrl+K.</p>
+        <button id="export-csv-btn" type="button" class="btn btn--primary" style="width: 100%;">Export CSV</button>
+      </div>
+    </aside>
+
+    <!-- Main Dashboard -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar__left">
+          <button id="mobile-nav-btn" type="button" class="btn btn--ghost mobile-nav-btn" aria-label="Toggle sidebar">Menu</button>
+          <h1 class="topbar__title">Revenue &amp; Cashflow Overview</h1>
+        </div>
+
+        <div class="topbar__actions">
+          <button id="cmd-trigger" type="button" class="cmd-trigger">
+            <span>Quick actions...</span>
+            <span class="kbd">Ctrl+K</span>
+          </button>
+          <button id="open-entry-btn" type="button" class="btn btn--primary">+ Record Invoice</button>
+          <button id="theme-toggle" type="button" class="btn btn--secondary">Dark Mode</button>
+        </div>
+      </header>
+
+      <main class="dashboard-body">
+        <!-- Filters -->
+        <section id="overview" class="filter-bar" aria-label="Date range and segment filters">
+          <div class="segmented" role="group" aria-label="Time horizon">
+            <button type="button" data-range="3m" aria-pressed="false">3M</button>
+            <button type="button" data-range="6m" aria-pressed="false">6M</button>
+            <button type="button" class="is-active" data-range="12m" aria-pressed="true">12M</button>
+          </div>
+
+          <label style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.84rem; color: var(--ink-muted);">
+            <span>Segment:</span>
+            <select id="tier-filter" class="select" aria-label="Filter by customer tier">
+              <option value="all">All Tiers</option>
+              <option value="enterprise">Enterprise</option>
+              <option value="pro">Pro Team</option>
+              <option value="starter">Starter</option>
+            </select>
+          </label>
+        </section>
+
+        <!-- KPIs -->
+        <section class="kpi-grid" aria-label="Key Financial Metrics">
+          <article class="kpi-card">
+            <div class="kpi-card__top">
+              <span>Monthly Recurring Revenue</span>
+              <span class="delta-pill delta-pill--up">+14.2%</span>
+            </div>
+            <div id="kpi-mrr" class="kpi-card__val">$137,600</div>
+          </article>
+
+          <article class="kpi-card">
+            <div class="kpi-card__top">
+              <span>Monthly Net Cashflow</span>
+              <span class="delta-pill delta-pill--up">Healthy</span>
+            </div>
+            <div id="kpi-net" class="kpi-card__val">+$76,200</div>
+          </article>
+
+          <article class="kpi-card">
+            <div class="kpi-card__top">
+              <span>Net Dollar Retention</span>
+              <span class="delta-pill delta-pill--up">+3.1%</span>
+            </div>
+            <div id="kpi-ndr" class="kpi-card__val">118.2%</div>
+          </article>
+
+          <article class="kpi-card">
+            <div class="kpi-card__top">
+              <span>Operating Runway</span>
+              <span class="delta-pill delta-pill--warn">Live</span>
+            </div>
+            <div id="kpi-runway" class="kpi-card__val">Cash-Flow +</div>
+          </article>
+        </section>
+
+        <!-- Charts -->
+        <section id="analytics" class="charts-grid">
+          <div class="panel">
+            <div class="panel__head">
+              <div>
+                <h2 class="panel__title">Revenue vs. Operating Expenses</h2>
+                <p class="panel__sub">Hover across months to inspect net margin trajectory</p>
+              </div>
+              <div style="display: flex; gap: 0.85rem; font-size: 0.78rem; color: var(--ink-muted);">
+                <span><strong style="color: var(--accent);">—</strong> Revenue</span>
+                <span><strong style="color: var(--amber);">--</strong> Expenses</span>
+              </div>
+            </div>
+            <div class="chart-box">
+              <canvas id="revenue-canvas" aria-label="Revenue vs operating expenses line chart"></canvas>
+              <div id="chart-tooltip" class="chart-tooltip mono"></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel__head">
+              <div>
+                <h2 class="panel__title">MRR Mix by Plan</h2>
+                <p class="panel__sub">Current month revenue distribution</p>
+              </div>
+            </div>
+            <div id="mix-list" class="mix-list"></div>
+          </div>
+        </section>
+
+        <!-- Ledger Table -->
+        <section id="ledger" class="panel">
+          <div class="table-toolbar">
+            <div>
+              <h2 class="panel__title">Customer Invoices &amp; Ledger</h2>
+              <p class="panel__sub">Search, sort columns, or record a new invoice entry</p>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.55rem;">
+              <label for="tx-search" class="sr-only">Search invoices</label>
+              <input id="tx-search" type="search" class="search-input" placeholder="Search customer or invoice..." />
+              <select id="tx-status" class="select" aria-label="Filter by invoice status">
+                <option value="all">All Statuses</option>
+                <option value="paid">Paid</option>
+                <option value="pending">Pending</option>
+                <option value="refunded">Refunded</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Invoice</th>
+                  <th>Customer</th>
+                  <th>Plan</th>
+                  <th><button type="button" data-sort="date">Date ↕</button></th>
+                  <th><button type="button" data-sort="amount">Amount &amp; Status ↕</button></th>
+                </tr>
+              </thead>
+              <tbody id="tx-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Record Invoice Modal -->
+  <div id="entry-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="entry-modal-title" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 id="entry-modal-title">Record Customer Invoice</h2>
+        <button id="close-entry-btn" type="button" class="btn btn--ghost">Close</button>
+      </div>
+      <form id="entry-form" class="field-grid">
+        <div class="field">
+          <label for="entry-customer">Customer Name</label>
+          <input id="entry-customer" name="customer" type="text" placeholder="e.g. Horizon Bio" required />
+        </div>
+        <div class="field">
+          <label for="entry-amount">Amount (USD)</label>
+          <input id="entry-amount" name="amount" type="number" min="1" step="1" placeholder="2400" required />
+        </div>
+        <div class="field">
+          <label for="entry-tier">Plan Tier</label>
+          <select id="entry-tier" name="tier">
+            <option value="Enterprise">Enterprise</option>
+            <option value="Pro" selected>Pro</option>
+            <option value="Starter">Starter</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="entry-status">Status</label>
+          <select id="entry-status" name="status">
+            <option value="Paid" selected>Paid</option>
+            <option value="Pending">Pending</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn--primary" style="width: 100%; margin-top: 0.25rem;">Save Invoice</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Command Palette Modal -->
+  <div id="cmd-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="cmd-title" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 id="cmd-title">Command Palette</h2>
+        <button id="close-cmd-btn" type="button" class="btn btn--ghost">Esc</button>
+      </div>
+      <div class="field">
+        <label for="cmd-input" class="sr-only">Filter commands</label>
+        <input id="cmd-input" type="text" placeholder="Type a command or filter..." />
+      </div>
+      <div id="cmd-list" class="cmd-list"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>
