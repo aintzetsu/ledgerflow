@@ -1,0 +1,69 @@
+/* ==========================================================================
+   LedgerFlow — Fintech Design Tokens (Light & Dark Themes)
+   ========================================================================== */
+
+:root {
+  --font-sans: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Light Theme — Crisp Fintech Ivory */
+  --bg: #f5f7fb;
+  --bg-elevated: #ffffff;
+  --bg-subtle: #eef2f7;
+  --ink: #0f172a;
+  --ink-secondary: #475569;
+  --ink-muted: #64748b;
+  --border: rgba(15, 23, 42, 0.1);
+  --border-strong: rgba(15, 23, 42, 0.2);
+
+  --accent: #059669;
+  --accent-hover: #047857;
+  --accent-soft: rgba(5, 150, 105, 0.12);
+  --accent-ink: #ffffff;
+  --blue: #2563eb;
+  --blue-soft: rgba(37, 99, 235, 0.12);
+  --amber: #d97706;
+  --amber-soft: rgba(217, 119, 6, 0.14);
+  --rose: #e11d48;
+  --rose-soft: rgba(225, 29, 72, 0.12);
+
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 12px 28px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 24px 56px rgba(15, 23, 42, 0.14);
+
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --fast: 150ms var(--ease);
+  --base: 240ms var(--ease);
+}
+
+[data-theme="dark"] {
+  --bg: #090d16;
+  --bg-elevated: #111827;
+  --bg-subtle: #1a2335;
+  --ink: #f1f5f9;
+  --ink-secondary: #cbd5e1;
+  --ink-muted: #94a3b8;
+  --border: rgba(241, 245, 249, 0.1);
+  --border-strong: rgba(241, 245, 249, 0.2);
+
+  --accent: #10b981;
+  --accent-hover: #34d399;
+  --accent-soft: rgba(16, 185, 129, 0.16);
+  --accent-ink: #052e16;
+  --blue: #60a5fa;
+  --blue-soft: rgba(96, 165, 250, 0.16);
+  --amber: #fbbf24;
+  --amber-soft: rgba(251, 191, 36, 0.16);
+  --rose: #fb7185;
+  --rose-soft: rgba(251, 113, 133, 0.16);
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.42);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.62);
+}
